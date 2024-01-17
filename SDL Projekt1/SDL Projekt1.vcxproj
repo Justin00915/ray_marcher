@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="hex_to_vector3.h" />
     <ClInclude Include="ray_marching.h" />
+    <ClInclude Include="ray_marching_namespace.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

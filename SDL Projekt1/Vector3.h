@@ -55,11 +55,13 @@ public:
 	}
 };
 
-std::ostream& operator<<(std::ostream& os, const Vector3 vec)
-{
-	os << "(" << vec.x << ',' << vec.y << ',' << vec.z << ")";
-	return os;
-}
+// By uncommentng this you shall cause a bug, because then this function 
+// will be defined more then once (if you care fix it, i dont)
+//std::ostream& operator<<(std::ostream& os, const Vector3 vec)
+//{
+//	os << "(" << vec.x << ',' << vec.y << ',' << vec.z << ")";
+//	return os;
+//}
 
 class Ray {
 public:

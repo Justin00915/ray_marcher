@@ -1,11 +1,9 @@
 #pragma once
 #include"Vector3.h"
-#include<map>
 
 //converts hex numbers and letters to decimal
 int hex_helper(char ch) {
-	if (ch < 58) return ch - 48;
-	return ch - 55;
+	return (ch < 58)? ch - 48 : ch - 55;
 }
 
 Vector3 hex_to_vector3(const char hex[]) {

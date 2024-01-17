@@ -35,5 +35,8 @@
     <ClInclude Include="ray_marching.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ray_marching_namespace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
