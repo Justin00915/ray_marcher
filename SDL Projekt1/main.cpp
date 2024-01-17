@@ -29,12 +29,7 @@ int main() {
 }
 
 void manage_window() {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
-
 	render(window, renderer, mouse_X, mouse_Y);
-
-	SDL_RenderPresent(renderer);
 }
 
 void handle_SDL_events(bool& running) {
