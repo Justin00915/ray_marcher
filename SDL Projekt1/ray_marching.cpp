@@ -8,7 +8,7 @@
 using namespace ray_marcher;
 
 
-Vector3 pixel_to_world_coords(int x, int y);
+Vector3 pixel_to_world_coords(int& x, int& y);
 
 const double spread = 0.001;
 const int marching_iters = 10000;
@@ -21,13 +21,13 @@ Vector3 base_light_color(hex_to_vector3("340068"));
 float base_light_str = 0.3; //between 0 and 1
 
 
-Box box(Vector3(0, 0, 20), Vector3(255, 255, 255), Vector3(2, 1.3767, 2));
+Sphere sph = Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 2);
 
 
 //march the ray and return its color
 Vector3 march_ray(Ray ray) {
 	for (int i = 0; i < marching_iters; i++) {
-		double d = box.SDF(ray.pos);
+		double d = sph.SDF(ray.pos);
 
 		if (d > 1000) {
 			break;
@@ -35,7 +35,7 @@ Vector3 march_ray(Ray ray) {
 
 		if (d <= 0.0001) {
 			double sun_illumination =
-				std::fmax(-(sun_light_dir.dot((box.pos - ray.pos).get_normalized())), 0);
+				std::fmax(-(sun_light_dir.dot((sph.pos - ray.pos).get_normalized())), 0);
 
 			Vector3 color = sun_light_color * sun_illumination * sun_light_str + base_light_color * base_light_str;
 			return color;
@@ -46,7 +46,8 @@ Vector3 march_ray(Ray ray) {
 }
 
 void render(SDL_Window* window, SDL_Renderer* renderer, int mouse_X, int mouse_Y) {
-	box.pos = pixel_to_world_coords(mouse_X, mouse_Y) + Vector3(0, 0, box.pos.z);
+	pixel_to_world_coords(mouse_X, mouse_Y);
+	sph.pos = Vector3(mouse_X, mouse_Y, sph.pos.z);
 
 	//for every pixel
 	for (double x = 0; x < WINDOW_WIDTH; x++) {
@@ -63,7 +64,7 @@ void render(SDL_Window* window, SDL_Renderer* renderer, int mouse_X, int mouse_Y
 	SDL_RenderPresent(renderer);
 }
 
-Vector3 pixel_to_world_coords(int x, int y) {
+Vector3 pixel_to_world_coords(int& x, int& y) {
 	x = (2 * x - WINDOW_WIDTH) * spread;
 	y = (2 * y - WINDOW_HEIGHT) * spread;
 	return(Vector3(x, y, 0));
