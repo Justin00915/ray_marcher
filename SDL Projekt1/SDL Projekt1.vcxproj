@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hex_to_vector3.h" />
+    <ClInclude Include="hit_info.h" />
     <ClInclude Include="scene_objects.h" />
     <ClInclude Include="ray_marching.h" />
     <ClInclude Include="ray_marching_namespace.h" />

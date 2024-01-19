@@ -1,5 +1,7 @@
 #pragma once
 #include"Vector3.h"
+#include"hit_info.h"
+
 class SceneObject {
 public:
 	Vector3 pos;
@@ -7,7 +9,7 @@ public:
 
 	SceneObject(Vector3 _pos = Vector3(0, 0, 0), Vector3 _col = Vector3(255, 255, 255)) {}
 
-	virtual double SDF(Vector3 pos) { return 0; };
+	virtual HitInfo signed_distance(Vector3 pos) { return HitInfo(); };
 };
 
 class Sphere : public SceneObject {
@@ -21,7 +23,7 @@ public:
 		r = _r;
 	}
 
-	double SDF(Vector3 pos) override;
+	HitInfo signed_distance(Vector3 pos) override;
 };
 
 class Box : public SceneObject
@@ -36,5 +38,6 @@ public:
 		radii = _radii;
 	}
 
-	double SDF(Vector3 pos) override;
+	HitInfo signed_distance(Vector3 pos) override;
 };
+

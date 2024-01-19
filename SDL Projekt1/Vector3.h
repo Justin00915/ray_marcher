@@ -67,6 +67,14 @@ public:
 		return std::fmin(std::fmin(std::abs(x), std::abs(y)), std::abs(z));
 	}
 
+	Vector3 operator*(Vector3 other) {
+		return Vector3(x * other.x, y * other.y, z * other.z);
+	}
+	
+	Vector3 operator/(Vector3 other) {
+		return Vector3(x / other.x, y / other.y, z / other.z);
+	}
+
 	Vector3 operator+(Vector3 other) {
 		return Vector3(x + other.x, y + other.y, z + other.z);
 	}

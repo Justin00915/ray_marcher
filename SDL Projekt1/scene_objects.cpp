@@ -1,10 +1,26 @@
 #include"scene_objects.h"
+#include"hit_info.h"
 
-double Sphere::SDF(Vector3 other_pos) {
-	return other_pos.get_dist(pos) - r;
+HitInfo Sphere::signed_distance(Vector3 other_pos) {
+	double dist = other_pos.get_dist(pos) - r;
+	Vector3 normal = (pos - other_pos).get_normalized();
+	return HitInfo{ dist, normal, col };
 }
 
-double Box::SDF(Vector3 pos) {
-	double dists = Vector3::max((pos - this->pos).get_absolute() - radii, Vector3(0, 0, 0)).get_length();
-	return dists;
+HitInfo Box::signed_distance(Vector3 other_pos) {
+	Vector3 centered_pos = (other_pos - pos);
+	double dist = Vector3::max(centered_pos.get_absolute() - radii, Vector3(0, 0, 0)).get_length();
+
+	int sign = -1;
+	Vector3 shenanigans = centered_pos / radii;
+	if (shenanigans.get_max() < shenanigans.get_abs_max()) {
+		shenanigans = shenanigans * -1;
+		sign = 1;
+	}
+	shenanigans = shenanigans - Vector3(1, 1, 1) * (shenanigans.get_max() - 0.00001);
+
+	Vector3 normal = Vector3::max(shenanigans, Vector3(0, 0, 0)).get_normalized() * sign;
+
+	return HitInfo{ dist, normal, col };
 }
+
