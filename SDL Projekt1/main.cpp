@@ -48,6 +48,3 @@ void handle_SDL_events(bool& running) {
 		}
 	}
 }
-
-
-//Code graveyard

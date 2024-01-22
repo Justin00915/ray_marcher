@@ -28,7 +28,7 @@ Sphere sph(Vector3(0, 0, 20), Vector3(255, 255, 255), 5);
 //march the ray and return its color
 Vector3 ray_march(Ray ray) {
 	int i = 0;
-	for (; i < marching_iters; i++) {
+	while (i < marching_iters) {
 		HitInfo h = box.signed_distance(ray.pos);
 
 		if (h.dist > 1000) {
@@ -42,7 +42,10 @@ Vector3 ray_march(Ray ray) {
 			Vector3 color = sun_light_color * sun_illumination * sun_light_str + base_light_color * base_light_str;
 			return color;
 		}
+
 		ray.march(h.dist);
+
+		i++;
 	}
 	return Vector3(255, 255, 255) / i;
 }
@@ -68,31 +71,3 @@ Vector3 pixel_to_world_coords(double x, double y) {
 	y = (2 * y - WINDOW_HEIGHT) * spread;
 	return(Vector3(x, y, 1));
 }
-
-//Code graveyard
-
-//void ray_march(SDL_Window* window, SDL_Renderer* renderer) {
-//	for (double x = 0; x < WINDOW_WIDTH; x++) {
-//		for (double y = 0; y < WINDOW_HEIGHT; y++) {
-//			double _x = (2 * x - WINDOW_WIDTH) * spread;
-//			double _y = (2 * y - WINDOW_HEIGHT) * spread;
-//
-//			Ray ray(Vector3(0, 0, 0), Vector3(_x, _y, 1).get_normalized());
-//
-//			//marching
-//			for (int i = 0; i < marching_iters; i++) {
-//				double d = SDF(ray.pos);
-//				if (d <= 0.1) {
-//					double sun_illumination =
-//						std::fmax(-(sun_light_dir.dot((box1.pos - ray.pos).get_normalized())), 0);
-//
-//					Vector3 color = sun_light_color * sun_illumination * sun_light_str + base_light_color * base_light_str;
-//					SDL_SetRenderDrawColor(renderer, color.x, color.y, color.z, SDL_ALPHA_OPAQUE);
-//					SDL_RenderDrawPoint(renderer, x, y);
-//					break;
-//				}
-//				ray.march(1.001 * d);
-//			}
-//		}
-//	}
-//}
