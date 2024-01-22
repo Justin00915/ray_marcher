@@ -3,7 +3,7 @@
 #include"Vector3.h"
 #include"hex_to_vector3.h"
 #include"ray_marching_namespace.h"
-#include"scene_objects.h"
+#include"scene.h"
 #include"hit_info.h"
 
 using namespace ray_marcher;
@@ -22,14 +22,13 @@ Vector3 base_light_color(hex_to_vector3("340068"));
 float base_light_str = 0.3; //between 0 and 1
 
 
-Box box(Vector3(0, 0, 20), Vector3(255, 255, 255), Vector3(1, 3, 2));
-Sphere sph(Vector3(0, 0, 20), Vector3(255, 255, 255), 5);
-
 //march the ray and return its color
-Vector3 ray_march(Ray ray) {
+Vector3 ray_march(Ray ray, Scene scene) {
 	int i = 0;
+	scene = Scene();
 	while (i < marching_iters) {
-		HitInfo h = box.signed_distance(ray.pos);
+		HitInfo h = scene.signed_distance(ray.pos);
+		//HitInfo h = Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5).signed_distance(ray.pos);
 
 		if (h.dist > 1000) {
 			break;
@@ -50,14 +49,12 @@ Vector3 ray_march(Ray ray) {
 	return Vector3(255, 255, 255) / i;
 }
 
-void render(SDL_Window* window, SDL_Renderer* renderer, int mouse_X, int mouse_Y) {
-	box.pos = pixel_to_world_coords(mouse_X, mouse_Y) * box.pos.z;
-
+void render(SDL_Window* window, SDL_Renderer* renderer, Scene scene, int mouse_X, int mouse_Y) {
 	//for every pixel
 	for (double x = 0; x < WINDOW_WIDTH; x++) {
 		for (double y = 0; y < WINDOW_HEIGHT; y++) {
 			Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
-			Vector3 col = ray_march(ray);
+			Vector3 col = ray_march(ray, scene);
 
 			SDL_SetRenderDrawColor(renderer, col.x, col.y, col.z, 255);
 			SDL_RenderDrawPoint(renderer, x, y);

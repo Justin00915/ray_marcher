@@ -3,6 +3,8 @@
 
 #include"ray_marching.h"
 #include"ray_marching_namespace.h"
+#include"scene.h"
+
 using namespace ray_marcher;
 
 void handle_SDL_events(bool&);
@@ -12,6 +14,8 @@ SDL_Event e;
 SDL_Renderer* renderer;
 SDL_Window* window;
 
+Scene scene = Scene();
+
 int mouse_X;
 int mouse_Y;
 
@@ -19,6 +23,11 @@ int main() {
 	//initing system
 	SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
 	SDL_SetWindowTitle(window, "raymarcher.kms");
+
+	/*scene.objects.push_back(Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5));
+	scene.objects.push_back(Box(Vector3(0, 0, 20), Vector3(255, 255, 255), Vector3(1, 3, 2)));*/
+	scene.object = Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5);
+
 
 	bool running = true;
 	while (running)
@@ -29,7 +38,7 @@ int main() {
 }
 
 void manage_window() {
-	render(window, renderer, mouse_X, mouse_Y);
+	render(window, renderer, scene, mouse_X, mouse_Y);
 }
 
 void handle_SDL_events(bool& running) {
