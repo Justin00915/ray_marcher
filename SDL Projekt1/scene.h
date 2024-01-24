@@ -3,11 +3,12 @@
 #include"hit_info.h"
 #include"Vector3.h"
 #include<vector>
+#include<memory>
 
 class Scene
 {
 public:
-	std::vector<SceneObject> objects = std::vector<SceneObject>();;
+	std::vector<std::unique_ptr<SceneObject>> objects;
 	//SceneObject object;
 
 	Scene() {
