@@ -1,4 +1,3 @@
-#define SDL_MAIN_HANDLED
 #include<SDL.h>
 
 #include"ray_marching.h"
@@ -15,7 +14,7 @@ SDL_Window* window;
 int mouse_X;
 int mouse_Y;
 
-int main() {
+int main(int args, char* argv[]) {
 	//initing system
 	SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
 	SDL_SetWindowTitle(window, "raymarcher.kms");
@@ -26,6 +25,7 @@ int main() {
 		handle_SDL_events(running);
 		manage_window();
 	}
+	return 0;
 }
 
 void manage_window() {
