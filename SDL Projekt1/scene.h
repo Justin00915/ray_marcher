@@ -7,12 +7,11 @@
 class Scene
 {
 public:
-	//std::vector<SceneObject> objects;
-	SceneObject object;
+	std::vector<SceneObject> objects = std::vector<SceneObject>();;
+	//SceneObject object;
 
 	Scene() {
-		//objects = std::vector<SceneObject>();
-		object = Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5);
+		//object = Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5);
 	}
 
 	HitInfo signed_distance(Vector3 pos);

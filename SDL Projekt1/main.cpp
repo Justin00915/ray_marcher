@@ -1,4 +1,3 @@
-#define SDL_MAIN_HANDLED
 #include<SDL.h>
 
 #include"ray_marching.h"
@@ -19,14 +18,14 @@ Scene scene = Scene();
 int mouse_X;
 int mouse_Y;
 
-int main() {
+int main(int argc, char* argv[]) {
 	//initing system
 	SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
 	SDL_SetWindowTitle(window, "raymarcher.kms");
 
-	/*scene.objects.push_back(Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5));
-	scene.objects.push_back(Box(Vector3(0, 0, 20), Vector3(255, 255, 255), Vector3(1, 3, 2)));*/
-	scene.object = Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5);
+	scene.objects.push_back(Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5));
+	scene.objects.push_back(Box(Vector3(0, 0, 20), Vector3(255, 255, 255), Vector3(1, 3, 2)));
+	//scene.object = Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5);
 
 
 	bool running = true;
@@ -35,6 +34,7 @@ int main() {
 		handle_SDL_events(running);
 		manage_window();
 	}
+	return 0;
 }
 
 void manage_window() {
