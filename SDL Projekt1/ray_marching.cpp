@@ -15,8 +15,9 @@ Vector3 pixel_to_world_coords(double x, double y);
 const double spread = 0.001;
 const int marching_iters = 1000;
 const double min_marching_dist = 0.1;
+const double max_marching_dist = 1000;
 
-Vector3 sun_light_dir = Vector3(0.6, -1, -1).get_normalized();
+Vector3 sun_light_dir = Vector3(-1, -0.3, 5).get_normalized();
 Vector3 sun_light_color(hex_to_vector3("F7D08A"));
 float sun_light_str = 1; //between 0 and 1 
 
@@ -27,12 +28,10 @@ float base_light_str = 0.3; //between 0 and 1
 //march the ray and return its color
 Vector3 ray_march(Ray ray, Scene& scene) {
 	int i = 0;
-
-
 	while (i < marching_iters) {
 		HitInfo hit = scene.signed_distance(ray.pos);
 
-		if (hit.dist > 1000) {
+		if (hit.dist > max_marching_dist) {
 			break;
 		}
 
@@ -52,7 +51,8 @@ Vector3 ray_march(Ray ray, Scene& scene) {
 }
 
 void render(SDL_Window* window, SDL_Renderer* renderer, Scene& scene, int mouse_X, int mouse_Y) {
-	//for every pixel
+	sun_light_dir = pixel_to_world_coords(WINDOW_WIDTH - mouse_X, WINDOW_HEIGHT - mouse_Y);
+
 	for (double x = 0; x < WINDOW_WIDTH; x++) {
 		for (double y = 0; y < WINDOW_HEIGHT; y++) {
 			Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
@@ -67,6 +67,6 @@ void render(SDL_Window* window, SDL_Renderer* renderer, Scene& scene, int mouse_
 
 Vector3 pixel_to_world_coords(double x, double y) {
 	x = (2 * x - WINDOW_WIDTH) * spread;
-	y = (2 * y - WINDOW_HEIGHT) * spread;
+	y = -(2 * y - WINDOW_HEIGHT) * spread;
 	return(Vector3(x, y, 1));
 }

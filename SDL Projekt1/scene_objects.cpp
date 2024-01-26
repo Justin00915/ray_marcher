@@ -17,7 +17,7 @@ HitInfo Box::signed_distance(Vector3 other_pos) {
 		shenanigans = shenanigans * -1;
 		sign = -1;
 	}
-	shenanigans = shenanigans - Vector3(1, 1, 1) * (shenanigans.get_max());
+	shenanigans = shenanigans - Vector3(1, 1, 1) * (shenanigans.get_max() - 0.00001);
 
 	Vector3 normal = Vector3::max(shenanigans, Vector3(0, 0, 0)).get_normalized() * sign;
 

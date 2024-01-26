@@ -9,11 +9,8 @@ class Scene
 {
 public:
 	std::vector<std::unique_ptr<SceneObject>> objects;
-	//SceneObject object;
 
-	Scene() {
-		//object = Sphere(Vector3(0, 0, 20), Vector3(255, 255, 255), 5);
-	}
+	Scene() {}
 
 	HitInfo signed_distance(Vector3 pos);
 };
