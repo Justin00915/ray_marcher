@@ -22,7 +22,7 @@ Vector3 sun_light_color(hex_to_vector3("FFF9C3"));
 float sun_light_str = 1; //between 0 and 1 
 
 Vector3 base_light_color(hex_to_vector3("000000"));
-float base_light_str = 0.3; //between 0 and 1
+float base_light_str = 0.3f; //between 0 and 1
 
 
 //march the ray and return its color
@@ -39,7 +39,7 @@ Vector3 ray_march(Ray& ray, Scene& scene, int n_bounced) {
 			double sun_illumination =
 				std::fmax(-(sun_light_dir.dot(hit.normal)), 0);
 
-			Vector3 color = hit.col * (sun_light_color * sun_illumination * sun_light_str + base_light_color * base_light_str * (1-sun_illumination));
+			Vector3 color = hit.mat.col * (sun_light_color * sun_illumination * sun_light_str + base_light_color * base_light_str * (1-sun_illumination));
 			return color;
 		}
 

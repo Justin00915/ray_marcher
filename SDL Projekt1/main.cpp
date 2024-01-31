@@ -23,8 +23,9 @@ int main(int argc, char* argv[]) {
 	SDL_CreateWindowAndRenderer(WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
 	SDL_SetWindowTitle(window, "raymarcher.kms");
 
-	scene.objects.push_back(std::make_unique<Sphere>(Sphere(Vector3(0, 5, 20), Vector3(255, 255, 255).get_normalized(), 5)));
-	scene.objects.push_back(std::make_unique<Box>(Box(Vector3(-12, 5, 20), Vector3(214, 141, 190).get_normalized(), Vector3(1, 3, 2))));
+	Material mat1 = Material(Vector3(255, 255, 255), 0.5);
+	scene.objects.push_back(std::make_unique<Sphere>(Sphere(Vector3(0, 5, 20), mat1, 5)));
+	scene.objects.push_back(std::make_unique<Box>(Box(Vector3(-12, 5, 20), mat1, Vector3(1, 3, 2))));
 
 	bool running = true;
 	while (running)
