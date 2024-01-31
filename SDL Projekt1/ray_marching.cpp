@@ -26,7 +26,7 @@ float base_light_str = 0.3; //between 0 and 1
 
 
 //march the ray and return its color
-Vector3 ray_march(Ray& ray, Scene& scene) {
+Vector3 ray_march(Ray& ray, Scene& scene, int n_bounced) {
 	int i = 0;
 	while (i < marching_iters) {
 		HitInfo hit = scene.signed_distance(ray.pos);
@@ -35,7 +35,7 @@ Vector3 ray_march(Ray& ray, Scene& scene) {
 			break;
 		}
 
-		if (hit.dist <= min_marching_dist) {
+		if (hit.dist <= min_marching_dist) {			
 			double sun_illumination =
 				std::fmax(-(sun_light_dir.dot(hit.normal)), 0);
 
@@ -56,7 +56,7 @@ void render(SDL_Window* window, SDL_Renderer* renderer, Scene& scene, int mouse_
 	for (double x = 0; x < WINDOW_WIDTH; x++) {
 		for (double y = 0; y < WINDOW_HEIGHT; y++) {
 			Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
-			Vector3 col = ray_march(ray, scene);
+			Vector3 col = ray_march(ray, scene, 0);
 
 			SDL_SetRenderDrawColor(renderer, col.x, col.y, col.z, 255);
 			SDL_RenderDrawPoint(renderer, x, y);

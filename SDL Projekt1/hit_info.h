@@ -7,4 +7,5 @@ struct HitInfo
 	double dist;
 	Vector3 normal;
 	Vector3 col;
+	float reflection_index;
 };

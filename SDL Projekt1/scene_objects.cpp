@@ -4,7 +4,7 @@
 HitInfo Sphere::signed_distance(Vector3 other_pos) {
 	double dist = other_pos.get_dist(pos) - r;
 	Vector3 normal = (other_pos - pos).get_normalized();
-	return HitInfo{ dist, normal, col };
+	return HitInfo{ dist, normal, col};
 }
 
 HitInfo Box::signed_distance(Vector3 other_pos) {
