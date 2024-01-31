@@ -23,6 +23,9 @@ public:
 	}
 	Vector3 get_normalized() {
 		double l = get_length();
+		if (l == 0) {
+			return *this;
+		}
 		return Vector3(x / l, y / l, z / l);
 	}
 
