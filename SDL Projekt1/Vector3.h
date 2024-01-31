@@ -26,7 +26,7 @@ public:
 		return Vector3(x / l, y / l, z / l);
 	}
 
-	Vector3 get_absolute() {
+	Vector3 get_absolutized() {
 		return Vector3(std::abs(x), std::abs(y), std::abs(z));
 	}
 

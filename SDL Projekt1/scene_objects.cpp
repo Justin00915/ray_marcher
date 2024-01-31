@@ -9,7 +9,7 @@ HitInfo Sphere::signed_distance(Vector3 other_pos) {
 
 HitInfo Box::signed_distance(Vector3 other_pos) {
 	Vector3 centered_pos = (other_pos - pos);
-	double dist = Vector3::max(centered_pos.get_absolute() - radii, Vector3(0, 0, 0)).get_length();
+	double dist = Vector3::max(centered_pos.get_absolutized() - radii, Vector3(0, 0, 0)).get_length();
 
 	int sign = 1;
 	Vector3 shenanigans = centered_pos / radii;
