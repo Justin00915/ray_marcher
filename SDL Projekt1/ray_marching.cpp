@@ -8,10 +8,13 @@
 #include"hit_info.h"
 #include<iostream>
 #include<thread>
+#include<SDL_thread.h>
 using namespace ray_marcher;
 
 
 Vector3 pixel_to_world_coords(double x, double y);
+
+const int max_n_threads = 2;
 
 const double spread = 0.001;
 const int max_marching_iters = 100;
@@ -55,7 +58,7 @@ Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces) {
 					+ ray_march(new_ray, scene, n_bounces + 1) * hit.mat.col * hit.mat.reflection_index;
 			}
 
-			return color ;
+			return color;
 		}
 
 		ray.march(hit.dist);
@@ -65,17 +68,23 @@ Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces) {
 	return Vector3(1, 1, 1);
 }
 
-void draw_threaded(SDL_Window* window, SDL_Renderer* renderer) {
-	SDL_Rect rect{ 0, 0, 50, 50 };
-	SDL_RenderDrawRect(renderer, &rect);
+void draw_threaded(SDL_Renderer* renderer, Scene& scene, int index, int n_threads) {
+	for (int x = 0; x < WINDOW_WIDTH; x++) {
+		for (int y = 0; y < WINDOW_HEIGHT; y++)
+			if ((x + y * WINDOW_HEIGHT) % n_threads == index) {
+				Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
+				Vector3 col = ray_march(ray, scene, 0);
+
+				SDL_SetRenderDrawColor(renderer, col.x * 255, col.y * 255, col.z * 255, 255);
+				SDL_RenderDrawPoint(renderer, x, y);
+			}
+	}
 }
 
 void render(SDL_Renderer* renderer, Scene& scene, int mouse_X, int mouse_Y) {
 	sun_light_dir = pixel_to_world_coords(WINDOW_WIDTH - mouse_X, WINDOW_HEIGHT - mouse_Y).get_normalized();
 
-	std::thread t = std::thread();
-
-	for (double x = 0; x < WINDOW_WIDTH; x++) {
+	/*for (double x = 0; x < WINDOW_WIDTH; x++) {
 		for (double y = 0; y < WINDOW_HEIGHT; y++) {
 			Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
 			Vector3 col = ray_march(ray, scene, 0);
@@ -83,11 +92,22 @@ void render(SDL_Renderer* renderer, Scene& scene, int mouse_X, int mouse_Y) {
 			SDL_SetRenderDrawColor(renderer, col.x * 255, col.y * 255, col.z * 255, 255);
 			SDL_RenderDrawPoint(renderer, x, y);
 		}
+	}*/
+	std::vector<std::thread> threads(max_n_threads);
+	for (int i = 0; i < max_n_threads; i++) {
+		threads.push_back(std::thread(draw_threaded, std::ref(renderer), std::ref(scene), i, max_n_threads));
 	}
+	
+	for (std::thread& t : threads) {
+		if (t.joinable()) {
+		t.join();
+		}
+	}
+
 	SDL_RenderPresent(renderer);
 }
 
-Vector3 pixel_to_world_coords(double x, double y) {
+inline Vector3 pixel_to_world_coords(double x, double y) {
 	x = (2 * x - WINDOW_WIDTH) * spread;
 	y = -(2 * y - WINDOW_HEIGHT) * spread;
 	return(Vector3(x, y, 1));
