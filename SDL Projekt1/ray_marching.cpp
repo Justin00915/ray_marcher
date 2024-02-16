@@ -11,10 +11,16 @@
 #include<SDL_thread.h>
 using namespace ray_marcher;
 
+struct Pixel
+{
+	int x;
+	int y;
+	Vector3 col;
+};
 
 Vector3 pixel_to_world_coords(double x, double y);
 
-const int max_n_threads = 2;
+const int max_n_threads = 10;
 
 const double spread = 0.001;
 const int max_marching_iters = 100;
@@ -68,15 +74,13 @@ Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces) {
 	return Vector3(1, 1, 1);
 }
 
-void draw_threaded(SDL_Renderer* renderer, Scene& scene, int index, int n_threads) {
+void draw_threaded(Scene& scene, int index, int n_threads, std::vector<Pixel>& rendered_pixel) {
 	for (int x = 0; x < WINDOW_WIDTH; x++) {
 		for (int y = 0; y < WINDOW_HEIGHT; y++)
 			if ((x + y * WINDOW_HEIGHT) % n_threads == index) {
 				Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
-				Vector3 col = ray_march(ray, scene, 0);
-
-				SDL_SetRenderDrawColor(renderer, col.x * 255, col.y * 255, col.z * 255, 255);
-				SDL_RenderDrawPoint(renderer, x, y);
+				Pixel pix{ x, y, ray_march(ray, scene, 0) * 255 };
+				rendered_pixel[x + y * WINDOW_WIDTH] = pix;
 			}
 	}
 }
@@ -93,15 +97,21 @@ void render(SDL_Renderer* renderer, Scene& scene, int mouse_X, int mouse_Y) {
 			SDL_RenderDrawPoint(renderer, x, y);
 		}
 	}*/
+	std::vector<Pixel> rendered_pixels(WINDOW_WIDTH * WINDOW_HEIGHT);
 	std::vector<std::thread> threads(max_n_threads);
 	for (int i = 0; i < max_n_threads; i++) {
-		threads.push_back(std::thread(draw_threaded, std::ref(renderer), std::ref(scene), i, max_n_threads));
+		threads.push_back(std::thread(draw_threaded, std::ref(scene), i, max_n_threads, std::ref(rendered_pixels)));
 	}
-	
+
 	for (std::thread& t : threads) {
 		if (t.joinable()) {
-		t.join();
+			t.join();
 		}
+	}
+
+	for (const auto& p : rendered_pixels) {
+		SDL_SetRenderDrawColor(renderer, p.col.x, p.col.y, p.col.z, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawPoint(renderer, p.x, p.y);
 	}
 
 	SDL_RenderPresent(renderer);
