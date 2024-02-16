@@ -8,25 +8,24 @@
 #include"hit_info.h"
 #include<iostream>
 #include<thread>
-#include<SDL_thread.h>
 using namespace ray_marcher;
 
 struct Pixel
 {
-	int x;
-	int y;
+	int x = 0;
+	int y = 0;
 	Vector3 col;
 };
 
 Vector3 pixel_to_world_coords(double x, double y);
 
-const int max_n_threads = 10;
+const int max_n_threads = 40;
 
 const double spread = 0.001;
 const int max_marching_iters = 100;
-const int max_reflections = 10;
+const int max_reflections = 100;
 const double min_marching_dist = 0.001;
-const double max_marching_dist = 100;
+const double max_cam_dist = 100;
 
 Vector3 sun_light_dir = Vector3(-1, -0.3, 5).get_normalized();
 Vector3 sun_light_color(hex_to_vector3("FFF9C3").get_normalized());
@@ -42,7 +41,7 @@ Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces) {
 	while (i < max_marching_iters) {
 		HitInfo hit = scene.signed_distance(ray.pos);
 
-		if (hit.dist > max_marching_dist) {
+		if (hit.dist > max_cam_dist) {
 			break;
 		}
 
@@ -88,17 +87,8 @@ void draw_threaded(Scene& scene, int index, int n_threads, std::vector<Pixel>& r
 void render(SDL_Renderer* renderer, Scene& scene, int mouse_X, int mouse_Y) {
 	sun_light_dir = pixel_to_world_coords(WINDOW_WIDTH - mouse_X, WINDOW_HEIGHT - mouse_Y).get_normalized();
 
-	/*for (double x = 0; x < WINDOW_WIDTH; x++) {
-		for (double y = 0; y < WINDOW_HEIGHT; y++) {
-			Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
-			Vector3 col = ray_march(ray, scene, 0);
-
-			SDL_SetRenderDrawColor(renderer, col.x * 255, col.y * 255, col.z * 255, 255);
-			SDL_RenderDrawPoint(renderer, x, y);
-		}
-	}*/
 	std::vector<Pixel> rendered_pixels(WINDOW_WIDTH * WINDOW_HEIGHT);
-	std::vector<std::thread> threads(max_n_threads);
+	std::vector<std::thread> threads;
 	for (int i = 0; i < max_n_threads; i++) {
 		threads.push_back(std::thread(draw_threaded, std::ref(scene), i, max_n_threads, std::ref(rendered_pixels)));
 	}
