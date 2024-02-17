@@ -36,6 +36,8 @@ double base_light_str = 0.3; //between 0 and 1
 
 
 //march the ray and return its color
+//if n_bounces == -1 then this func
+//is looking for any collision at all(this also saves computing power)
 Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces) {
 	int i = 0;
 	while (i < max_marching_iters) {
@@ -45,10 +47,19 @@ Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces) {
 			break;
 		}
 
-		if (hit.dist <= min_marching_dist) {
+		if (hit.dist < min_marching_dist) {
+			//-1 is to check if ray reaches sun
+			if (n_bounces == -1) {
+				return Vector3(0, 0, 0);
+			}
 			//First calculate color disregarding if ray will reflect
-			double sun_illumination =
-				std::fmax(-(sun_light_dir.dot(hit.normal)), 0);
+			double sun_illumination = 0;
+
+			Ray sun_ray(ray.pos, sun_light_dir * -1);
+			sun_ray.march(min_marching_dist);
+			if (ray_march(sun_ray, scene, -1) == Vector3(1, 1, 1)) {
+				sun_illumination = std::fmax(-(sun_light_dir.dot(hit.normal)), 0);
+			}
 
 			Vector3 sun_plus_base_color =
 				sun_light_color * sun_illumination * sun_light_str
