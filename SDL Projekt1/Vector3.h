@@ -95,6 +95,10 @@ public:
 	Vector3 operator/(double lambda) {
 		return Vector3(x / lambda, y / lambda, z / lambda);
 	}
+
+	bool operator==(Vector3 other) {
+		return x == other.x && y == other.y && z == other.z;
+	}
 };
 
 // By uncommentng this you shall cause a bug, because then this function 
