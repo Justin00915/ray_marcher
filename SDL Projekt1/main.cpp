@@ -24,14 +24,15 @@ int main(int argc, char* argv[]) {
 	SDL_SetWindowTitle(window, "raymarcher.kms");
 
 	//Mirror like material
-	Material mat1 = Material(Vector3(255, 255, 255).get_normalized(), 0.99);
+	Material mat1 = Material(Vector3(255, 255, 255).get_normalized(), 0.5);
 
 	//Almost non-reflective material
-	Material mat2 = Material(Vector3(255, 0, 0).get_normalized(), 0.3);
+	Material mat2 = Material(Vector3(255, 0, 0).get_normalized(), 0);
 
-	scene.objects.push_back(std::make_unique<Sphere>(Sphere(Vector3(3, 0, 20), mat1, 5)));
-	scene.objects.push_back(std::make_unique<Sphere>(Sphere(Vector3(0, 3, 20), mat1, 5)));
-	scene.objects.push_back(std::make_unique<Box>(Box(Vector3( 9, 0, 20), mat2, Vector3(1, 30, 30))));
+	//scene.objects.push_back(std::make_unique<Sphere>(Sphere(Vector3(3, 0, 20), mat1, 5)));
+	scene.objects.push_back(std::make_unique<Sphere>(Sphere(Vector3(10, 0, 20), mat1, 10)));
+	scene.objects.push_back(std::make_unique<Sphere>(Sphere(Vector3(-6, 0, 20), mat1, 6)));
+	scene.objects.push_back(std::make_unique<Box>(Box(Vector3( 0, -5, 25), mat2, Vector3(10, 1, 30))));
 
 	bool running = true;
 	while (running)

@@ -15,9 +15,9 @@ public:
 
 class Sphere : public SceneObject {
 public:
-	float r;
+	double r;
 
-	Sphere(Vector3 _pos, Material _mat, float _r) {
+	Sphere(Vector3 _pos, Material _mat, double _r) {
 		pos = _pos;
 		mat = _mat;
 
