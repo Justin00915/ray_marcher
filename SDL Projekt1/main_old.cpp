@@ -9,8 +9,8 @@
 //SDL_Renderer* renderer;
 //SDL_Event event;
 //
-//float fps = 60;
-//float timestep = 1000 / fps;
+//double fps = 60;
+//double timestep = 1000 / fps;
 //
 //int mouse_X;
 //int mouse_Y;
