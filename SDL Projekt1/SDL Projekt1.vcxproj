@@ -137,6 +137,7 @@
     <ClCompile Include="main_old.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ray_marching.cpp" />
+    <ClCompile Include="rendering.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="scene_objects.cpp" />
   </ItemGroup>
@@ -144,10 +145,11 @@
     <ClInclude Include="hex_to_vector3.h" />
     <ClInclude Include="hit_info.h" />
     <ClInclude Include="material.h" />
+    <ClInclude Include="rendering.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="scene_objects.h" />
     <ClInclude Include="ray_marching.h" />
-    <ClInclude Include="ray_marching_namespace.h" />
+    <ClInclude Include="globals.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -30,6 +30,9 @@
     <ClCompile Include="scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="rendering.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hex_to_vector3.h">
@@ -41,7 +44,7 @@
     <ClInclude Include="ray_marching.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ray_marching_namespace.h">
+    <ClInclude Include="globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="hit_info.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

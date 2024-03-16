@@ -5,7 +5,7 @@
 
 struct HitInfo
 {
-	double dist;
+	double dist = 0;
 	Vector3 normal;
 	Material mat;
 };

@@ -1,10 +1,8 @@
 #include<SDL.h>
 
-#include"ray_marching.h"
-#include"ray_marching_namespace.h"
+#include"rendering.h"
+#include"globals.h"
 #include"scene.h"
-
-using namespace ray_marcher;
 
 void handle_SDL_events(bool&);
 void manage_window();
@@ -17,6 +15,8 @@ Scene scene;
 
 int mouse_X;
 int mouse_Y;
+
+Vector3 sun_light_dir = Vector3(-1, -0.3, 5).get_normalized();
 
 int main(int argc, char* argv[]) {
 	//initing system

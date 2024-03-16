@@ -2,39 +2,18 @@
 
 #include"Vector3.h"
 #include"hex_to_vector3.h"
-#include"ray_marching_namespace.h"
+#include"globals.h"
 #include"scene_objects.h"
 #include"scene.h"
 #include"hit_info.h"
 #include<iostream>
 #include<thread>
-using namespace ray_marcher;
 
-struct Pixel
-{
-	int x = 0;
-	int y = 0;
-	Vector3 col;
-};
-
-Vector3 pixel_to_world_coords(double x, double y);
-
-const int max_n_threads = 40;
-const double spread = 0.001;
-const int max_marching_iters = 500;
-const int max_reflections = 10;
-const double min_marching_dist = 0.00001;
-const double max_cam_dist = 100;
-
-const Vector3 HIT_AN_OBJECT_COLOR = Vector3(-1, -1, -1);
-
-Vector3 sun_light_dir = Vector3(-1, -0.3, 5).get_normalized();
 Vector3 sun_light_color(hex_to_vector3("FFF9C3").get_normalized());
 double sun_light_str = 1; //between 0 and 1 
 
 Vector3 base_light_color(hex_to_vector3("92BCEA").get_normalized());
 double base_light_str = 0.3; //between 0 and 1
-
 
 //march the ray and return its color
 //if n_bounces == -1 then this function
@@ -100,34 +79,4 @@ void draw_threaded(Scene& scene, int index, int n_threads, std::vector<Pixel>& r
 			}
 		}
 	}
-}
-
-void render(SDL_Renderer* renderer, Scene& scene, int mouse_X, int mouse_Y) {
-	sun_light_dir = pixel_to_world_coords(WINDOW_WIDTH - mouse_X, WINDOW_HEIGHT - mouse_Y).get_normalized();
-
-	std::vector<Pixel> rendered_pixels(WINDOW_WIDTH * WINDOW_HEIGHT);
-	std::vector<std::thread> threads;
-	for (int i = 0; i < max_n_threads; i++) {
-		threads.push_back(
-			std::thread(draw_threaded, std::ref(scene), i, max_n_threads, std::ref(rendered_pixels)));
-	}
-
-	for (std::thread& t : threads) {
-		if (t.joinable()) {
-			t.join();
-		}
-	}
-
-	for (const auto& p : rendered_pixels) {
-		SDL_SetRenderDrawColor(renderer, p.col.x, p.col.y, p.col.z, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawPoint(renderer, p.x, p.y);
-	}
-
-	SDL_RenderPresent(renderer);
-}
-
-inline Vector3 pixel_to_world_coords(double x, double y) {
-	x = (2 * x - WINDOW_WIDTH) * spread;
-	y = -(2 * y - WINDOW_HEIGHT) * spread;
-	return(Vector3(x, y, 1));
 }
