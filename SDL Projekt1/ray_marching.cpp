@@ -9,11 +9,24 @@
 #include<iostream>
 #include<thread>
 
+Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces);
+
 Vector3 sun_light_color(hex_to_vector3("FFF9C3").get_normalized());
 double sun_light_str = 1; //between 0 and 1 
-
 Vector3 base_light_color(hex_to_vector3("92BCEA").get_normalized());
 double base_light_str = 0.3; //between 0 and 1
+
+void draw_threaded(Scene& scene, int index, int n_threads, std::vector<Pixel>& rendered_pixel) {
+	for (int x = 0; x < WINDOW_WIDTH; x++) {
+		for (int y = 0; y < WINDOW_HEIGHT; y++) {
+			if ((x + y * WINDOW_HEIGHT) % n_threads == index) {
+				Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
+				Pixel pix{ x, y, ray_march(ray, scene, 0) * 255 };
+				rendered_pixel[x + y * WINDOW_WIDTH] = pix;
+			}
+		}
+	}
+}
 
 //march the ray and return its color
 //if n_bounces == -1 then this function
@@ -67,16 +80,4 @@ Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces) {
 		i++;
 	}
 	return base_light_color;
-}
-
-void draw_threaded(Scene& scene, int index, int n_threads, std::vector<Pixel>& rendered_pixel) {
-	for (int x = 0; x < WINDOW_WIDTH; x++) {
-		for (int y = 0; y < WINDOW_HEIGHT; y++) {
-			if ((x + y * WINDOW_HEIGHT) % n_threads == index) {
-				Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
-				Pixel pix{ x, y, ray_march(ray, scene, 0) * 255 };
-				rendered_pixel[x + y * WINDOW_WIDTH] = pix;
-			}
-		}
-	}
 }

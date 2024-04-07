@@ -6,9 +6,12 @@
 class SceneObject {
 public:
 	Vector3 pos;
-	Material mat;
+	Material* mat;
 
-	SceneObject(Vector3 _pos = Vector3(0, 0, 0), Material _mat = Material()) {}
+	SceneObject(Vector3 _pos = Vector3(), Material* _mat = nullptr) {
+		pos = _pos;
+		mat = _mat;
+	}
 
 	virtual HitInfo signed_distance(Vector3 pos) { return HitInfo(); };
 };
@@ -17,7 +20,7 @@ class Sphere : public SceneObject {
 public:
 	double r;
 
-	Sphere(Vector3 _pos, Material _mat, double _r) {
+	Sphere(Vector3 _pos, Material* _mat, double _r){
 		pos = _pos;
 		mat = _mat;
 
@@ -32,7 +35,7 @@ class Box : public SceneObject
 public:
 	Vector3 radii;
 
-	Box(Vector3 _pos, Material _mat, Vector3 _radii) {
+	Box(Vector3 _pos, Material* _mat, Vector3 _radii){
 		pos = _pos;
 		mat = _mat;
 
