@@ -1,5 +1,5 @@
 #pragma once
-#include"Vector3.h"
+#include"vector3.h"
 #include"scene_objects.h"
 #include"material.h"
 

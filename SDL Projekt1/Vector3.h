@@ -71,20 +71,37 @@ public:
 	}
 
 	
-	Vector3 operator/(Vector3 other) {
-		return Vector3(x / other.x, y / other.y, z / other.z);
-	}
 
 	Vector3 operator+(Vector3 other) {
+		return Vector3(x + other.x, y + other.y, z + other.z);
+	}
+
+	Vector3 operator+=(Vector3 other) {
 		return Vector3(x + other.x, y + other.y, z + other.z);
 	}
 
 	Vector3 operator-(Vector3 other) {
 		return Vector3(x - other.x, y - other.y, z - other.z);
 	}
+	
+	Vector3 operator-=(Vector3 other) {
+		return Vector3(x - other.x, y - other.y, z - other.z);
+	}
 
 	Vector3 operator*(double lambda) {
 		return Vector3(x * lambda, y * lambda, z * lambda);
+	}
+	
+	Vector3 operator*=(double lambda) {
+		return Vector3(x * lambda, y * lambda, z * lambda);
+	}
+
+	Vector3 operator/(double lambda) {
+		return Vector3(x / lambda, y / lambda, z / lambda);
+	}
+
+	Vector3 operator/=(double lambda) {
+		return Vector3(x / lambda, y / lambda, z / lambda);
 	}
 
 	//Pairwise
@@ -92,22 +109,22 @@ public:
 		return Vector3(x * other.x, y * other.y, z * other.z);
 	}
 
-	Vector3 operator/(double lambda) {
-		return Vector3(x / lambda, y / lambda, z / lambda);
+	Vector3 operator*=(Vector3 other) {
+		return Vector3(x * other.x, y * other.y, z * other.z);
+	}
+
+	Vector3 operator/(Vector3 other) {
+		return Vector3(x / other.x, y / other.y, z / other.z);
+	}
+
+	Vector3 operator/=(Vector3 other) {
+		return Vector3(x / other.x, y / other.y, z / other.z);
 	}
 
 	bool operator==(Vector3 other) {
 		return x == other.x && y == other.y && z == other.z;
 	}
 };
-
-// By uncommentng this you shall cause a bug, because then this function 
-// will be defined more then once (if you care fix it, i dont)
-//std::ostream& operator<<(std::ostream& os, const Vector3 vec)
-//{
-//	os << "(" << vec.x << ',' << vec.y << ',' << vec.z << ")";
-//	return os;
-//}
 
 class Ray {
 public:

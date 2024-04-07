@@ -1,7 +1,7 @@
 #pragma once
 const int WINDOW_WIDTH = 1000;
 const int WINDOW_HEIGHT = 600;
-const int max_n_threads = 40;
+const int max_n_threads = 15;
 const double spread = 0.001;
 const int max_marching_iters = 500;
 const int max_reflections = 10;

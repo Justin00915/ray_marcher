@@ -1,6 +1,6 @@
 #include<SDL.h>
 
-#include"Vector3.h"
+#include"vector3.h"
 #include"hex_to_vector3.h"
 #include"globals.h"
 #include"scene_objects.h"
@@ -20,7 +20,7 @@ void draw_threaded(Scene& scene, int index, int n_threads, std::vector<Pixel>& r
 	for (int x = 0; x < WINDOW_WIDTH; x++) {
 		for (int y = 0; y < WINDOW_HEIGHT; y++) {
 			if ((x + y * WINDOW_HEIGHT) % n_threads == index) {
-				Ray ray(Vector3(0, 0, 0), pixel_to_world_coords(x, y).get_normalized());
+				Ray ray(scene.cam.pos, pixel_to_world_coords(x, y).get_normalized());
 				Pixel pix{ x, y, ray_march(ray, scene, 0) * 255 };
 				rendered_pixel[x + y * WINDOW_WIDTH] = pix;
 			}

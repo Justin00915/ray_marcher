@@ -142,6 +142,7 @@
     <ClCompile Include="scene_objects.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="hex_to_vector3.h" />
     <ClInclude Include="hit_info.h" />
     <ClInclude Include="material.h" />
@@ -150,7 +151,7 @@
     <ClInclude Include="scene_objects.h" />
     <ClInclude Include="ray_marching.h" />
     <ClInclude Include="globals.h" />
-    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

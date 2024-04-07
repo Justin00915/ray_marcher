@@ -1,4 +1,9 @@
 #include"scene.h"
+#include"camera.h"
+
+void Scene::set_camera(Camera cam) {
+	this->cam = cam;
+}
 
 HitInfo Scene::signed_distance(Vector3 pos) {
 

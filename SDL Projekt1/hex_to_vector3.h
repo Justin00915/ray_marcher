@@ -1,5 +1,5 @@
 #pragma once
-#include"Vector3.h"
+#include"vector3.h"
 
 //converts hex numbers to the decimal ascii representation of a character
 int hex_helper(char ch) {
