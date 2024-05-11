@@ -20,7 +20,14 @@ void draw_threaded(Scene& scene, int index, int n_threads, std::vector<Pixel>& r
 	for (int x = 0; x < WINDOW_WIDTH; x++) {
 		for (int y = 0; y < WINDOW_HEIGHT; y++) {
 			if ((x + y * WINDOW_HEIGHT) % n_threads == index) {
-				Ray ray(scene.cam.pos, pixel_to_world_coords(x, y).get_normalized());
+				Vector3 pixel_to_world = pixel_to_world_coords(x, y);
+				double angle = scene.cam.angles.y * RADIANS_TO_DEGREE;
+				Vector3 base_ray_dir = Vector3(
+					pixel_to_world.x * spread, pixel_to_world.y * spread + scene.cam.angles.x * 0.1, 1
+				);
+
+				Vector3 ray_dir = rotate_by_angle(base_ray_dir, angle);
+				Ray ray(scene.cam.pos, ray_dir.get_normalized());
 				Pixel pix{ x, y, ray_march(ray, scene, 0) * 255 };
 				rendered_pixel[x + y * WINDOW_WIDTH] = pix;
 			}
@@ -62,10 +69,11 @@ Vector3 ray_march(Ray& ray, Scene& scene, int n_bounces) {
 
 			//Do reflection if ray can still reflect and calc new color
 			if (n_bounces < max_reflections) {
-				//reflect vector along normal
+				//Ray has hit an object, so reflect vector along object normal
 				Ray new_ray = Ray(Vector3(ray.pos), Vector3(hit.normal * 2 + ray.dir).get_normalized());
 				new_ray.march(min_marching_dist);
 
+				//Update color
 				color = color * (1 - hit.mat.reflection_index);
 				if (hit.mat.reflection_index != 0)
 				{
